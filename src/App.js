@@ -3,6 +3,8 @@ import './App.css';
 import { TreeNode } from './TreeNode'
 import { Story } from './Story'
 import { Comment } from './Comment'
+import styled from 'styled-components'
+
 const items = [
   {
     "by": "ChrisRackauckas",
@@ -108,7 +110,7 @@ const itemsToNodes = (items) => {
   return items.map(item => {
     return {
       id: item.id,
-      label: item.type === 'story' ? `story by ${item.by}` : `comment by ${item.by}`,
+      label: item.type === 'story' ? `Story by ${item.by}` : `Comment by ${item.by}`,
       childNodes: itemsToNodes(item.kidNodes || [])
     }
   })
@@ -146,18 +148,27 @@ export class App extends Component {
   render() {
     const { selectedItem } = this.state
     return (
-      <div style={{ display: 'flex', width: '100%' }}>
-        <div style={{ width: '50%' }}>
-          <TreeNode label='News' level={0} childNodes={childNodes} onSelect={this.selected} />
-        </div>
-        <div style={{ width: '50%' }}>
+      <Main>
+        <Pane>
+          <TreeNode label='News' childNodes={childNodes} onSelect={this.selected} />
+        </Pane>
+        <Pane>
           {selectedItem && selectedItem.type === 'story' && <Story item={selectedItem} />}
           {selectedItem && selectedItem.type !== 'story' && <Comment item={selectedItem} />}
-        </div>
-      </div >
+        </Pane>
+      </Main >
     )
 
   }
 }
+
+const Main = styled.div`
+  display: flex;
+  width: 100%
+`
+
+const Pane = styled.div`
+  width: 50%
+`
 
 export default App;
